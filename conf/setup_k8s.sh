@@ -34,6 +34,27 @@ echo $TOKEN
 # expose the port of k8s dashboard
 kubectl -n kubernetes-dashboard proxy --address 0.0.0.0 &
 
+helm repo add jenkinsci https://charts.jenkins.io
+helm repo update
+
+CHART=jenkinsci/jenkins
+CHART_VERSION=2.6.2
+helm install jenkins-on-kind $CHART \
+    --version $CHART_VERSION \
+    --namespace default
+
+# wait util the ui of webserver ready, and port-forward ports
+ATTEMPTS=0
+ROLLOUT_STATUS_CMD="kubectl rollout status deployment/jenkins-on-kind"
+until $ROLLOUT_STATUS_CMD || [ $ATTEMPTS -eq 60 ]; do
+  $ROLLOUT_STATUS_CMD
+  ATTEMPTS=$((attempts + 1))
+  sleep 10
+done
+kubectl --namespace default port-forward deployment/jenkins-on-kind 8080:8080 --address 0.0.0.0 &
+
+echo "account admin with password:" $(kubectl get secret --namespace default jenkins-on-kind -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode)
+
 echo "kind cluster created, sleep infinity"
 # sleep infinity, keep the process hangs here
 sleep infinity;
