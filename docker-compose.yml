@@ -1,0 +1,15 @@
+version: '3'
+services:
+  kind-agent:
+    build: .
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    ports:
+      - "8001:8001"  # k8s dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./conf:/conf"
+    command: bash /conf/setup_k8s.sh
+    dns:
+      - 8.8.8.8
+    network_mode: bridge  # make sure airflow-k8s in same bridge as kind
