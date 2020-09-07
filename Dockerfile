@@ -32,6 +32,7 @@ RUN apt-get update \
            rsync \
            sasl2-bin \
            sudo \
+           wget \
     && apt-get autoremove -yqq --purge \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
@@ -87,3 +88,6 @@ RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - \
 RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 \
     && chmod 700 get_helm.sh \
     && bash get_helm.sh
+
+RUN wget https://github.com/kubeflow/kfctl/releases/download/v1.1.0/kfctl_v1.1.0-0-g9a3621e_linux.tar.gz \
+    && tar -xvf kfctl_v1.1.0-0-g9a3621e_linux.tar.gz 

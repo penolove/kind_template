@@ -14,6 +14,9 @@ kubectl get storageclass
 echo "Showing kube-system pods"
 kubectl get -n kube-system pods
 
+# add nginx-ingress https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx
+kubectl apply -f /conf/ingress-nginx-controller.yaml
+
 # setup dashboard
 kubectl apply -f /conf/dashboard.yaml
 
@@ -33,6 +36,20 @@ echo $TOKEN
 
 # expose the port of k8s dashboard
 kubectl -n kubernetes-dashboard proxy --address 0.0.0.0 &
+
+# fetch kubeflow required files
+mkdir -p /kf; cd /kf; /kfctl apply -V -f https://raw.githubusercontent.com/kubeflow/manifests/v1.0-branch/kfdef/kfctl_k8s_istio.v1.0.2.yaml
+
+# wait util the ingress controller ready
+ATTEMPTS=0
+ROLLOUT_STATUS_CMD="kubectl rollout status deployment/ingress-nginx-controller -n ingress-nginx"
+until $ROLLOUT_STATUS_CMD || [ $ATTEMPTS -eq 60 ]; do
+  $ROLLOUT_STATUS_CMD
+  ATTEMPTS=$((attempts + 1))
+  sleep 10
+done
+
+kubectl apply -f /conf/istio-ingressgateway.yaml
 
 echo "kind cluster created, sleep infinity"
 # sleep infinity, keep the process hangs here
