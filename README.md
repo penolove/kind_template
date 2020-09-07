@@ -1,6 +1,8 @@
-# Kind TEmplate
+# kind_template
 
 in this repo, I propose to launch a < application > with the support of kind (kubernetes in docker)
+
+and you can fork this repo for your own application which require a minimum k8s env for developer
 
 ## Prerequisite
 
