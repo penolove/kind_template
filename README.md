@@ -19,3 +19,24 @@ docker-compose down  # shutdown service
 ```
 
 [K8s Dashboard](http://127.0.0.1:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/login) is here and you can skip the auth by click skip button.
+
+[Argo UI](http://localhost:2746/) is here and you can skip the auth by click skip button.
+
+and you can upload the hello-word.yaml to the UI
+
+## there are some issue with the worker executor
+
+https://argoproj.github.io/argo/workflow-executors/
+
+TODO: figure it out
+
+https://github.com/argoproj/argo/issues/2376
+
+```bash
+wget https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml 
+
+# and add following into workflow-controller-configmap
+# data:
+#   config: |
+#     containerRuntimeExecutor: k8sapi
+```
