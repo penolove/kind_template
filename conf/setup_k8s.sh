@@ -37,7 +37,6 @@ kubectl -n kubernetes-dashboard proxy --address 0.0.0.0 &
 # follow the quick start here: https://github.com/argoproj/argo/blob/master/docs/quick-start.md
 kubectl create ns argo
 kubectl apply -n argo -f /conf/argo-install.yaml
-kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=argo:default --namespace=arg
 # kubectl create clusterrolebinding YOURNAME-cluster-admin-binding --clusterrole=cluster-admin 
 
 ATTEMPTS=0

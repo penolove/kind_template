@@ -22,7 +22,7 @@ docker-compose down  # shutdown service
 
 [Argo UI](http://localhost:2746/) is here and you can skip the auth by click skip button.
 
-and you can upload the hello-word.yaml to the UI
+finally you can upload the `hello-word.yaml`, `dag-diamond.yaml` to the workflow
 
 ## there are some issue with the worker executor
 
