@@ -37,7 +37,6 @@ kubectl -n kubernetes-dashboard proxy --address 0.0.0.0 &
 # follow the quick start here: https://github.com/argoproj/argo/blob/master/docs/quick-start.md
 kubectl create ns argo
 kubectl apply -n argo -f /conf/argo-install.yaml
-# kubectl create clusterrolebinding YOURNAME-cluster-admin-binding --clusterrole=cluster-admin 
 
 ATTEMPTS=0
 ROLLOUT_STATUS_CMD="kubectl rollout status deployment/argo-server -n argo"
@@ -48,7 +47,7 @@ until $ROLLOUT_STATUS_CMD || [ $ATTEMPTS -eq 60 ]; do
 done
 
 kubectl -n argo port-forward deployment/argo-server 2746:2746 --address 0.0.0.0 &
-# create a service account which can watch
+# bind admin role into argo:default service account
 kubectl create rolebinding argo-admin --clusterrole=admin --serviceaccount=argo:default
 
 echo "kind cluster created, sleep infinity"
